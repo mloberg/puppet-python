@@ -15,7 +15,7 @@ class python(
     include boxen::config
 
     package { 'readline':
-      ensure => '6.2.4',
+      ensure => latest,
     }
 
     file { "${boxen::config::envdir}/pyenv.sh":

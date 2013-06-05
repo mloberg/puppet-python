@@ -143,9 +143,10 @@ python-build $KEEP $VERBOSE "$DEFINITION" "$PREFIX" || STATUS="$?"
 # Execute `after_install` hooks.
 for hook in "${after_hooks[@]}"; do eval "$hook"; done
 
+# Install readline package
+"${PREFIX}/bin/pip" --quiet install readline
+
 # Run `pyenv-rehash` after a successful installation.
 [ "$STATUS" != "0" ] || pyenv rehash
-
-pip install readline >/dev/null
 
 exit "$STATUS"

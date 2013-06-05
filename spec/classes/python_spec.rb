@@ -16,7 +16,7 @@ describe 'python' do
     })
 
     should contain_package("readline").with({
-      :ensure => '6.2.4',
+      :ensure => 'latest',
     })
 
     should contain_file(versions).with_ensure('directory')
