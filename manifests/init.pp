@@ -14,6 +14,10 @@ class python(
   if $::osfamily == 'Darwin' {
     include boxen::config
 
+    package { 'readline':
+      ensure => '6.2.4',
+    }
+
     file { "${boxen::config::envdir}/pyenv.sh":
       source => 'puppet:///modules/python/pyenv.sh',
     }
@@ -28,6 +32,14 @@ class python(
   file { "${pyenv_root}/versions":
     ensure  => directory,
     owner   => $pyenv_user,
+    require => Repository[$pyenv_root],
+  }
+
+  file { "${pyenv_root}/plugins/python-build/bin/pyenv-install":
+    ensure  => file,
+    source  => 'puppet:///modules/python/pyenv-install',
+    owner   => $pyenv_user,
+    mode    => '0755',
     require => Repository[$pyenv_root],
   }
 }
