@@ -6,5 +6,5 @@ class python::params {
   $pyenv_user = $::boxen_user
   $pyenv_root = "${boxen::config::home}/pyenv"
 
-  $pyenv_version = 'v0.2.0'
+  $pyenv_version = 'v0.4.0-20131217'
 }
