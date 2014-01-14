@@ -6,5 +6,5 @@
 #
 
 class python::3_3 {
-  python::version { '3.3.0': }
+  python::version { '3.3.3': }
 }
