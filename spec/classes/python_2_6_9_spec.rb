@@ -1,9 +1,9 @@
 require "spec_helper"
 
-describe "python::3_3" do
+describe "python::2_6_9" do
   let(:facts) { default_test_facts }
 
   it do
-    should contain_python__version("3.3.3")
+    should contain_python__version("2.6.9")
   end
 end
