@@ -1,8 +1,8 @@
-# Install Python 3.3.0
+# Install Python 3.3.3
 #
 # Usage:
 #
-#   include python::3_3_0
+#   include python::3_3_3
 #
 
 class python::3_3_3 {
