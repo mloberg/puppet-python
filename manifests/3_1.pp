@@ -5,6 +5,6 @@
 #   include python::3_3
 #
 
-class python::3_3 {
-  python::version { '3.3.3': }
+class python::3_1 {
+  python::version { '3.1.5': }
 }

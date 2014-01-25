@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "python::3_3" do
+describe "python::3_3_3" do
   let(:facts) { default_test_facts }
 
   it do

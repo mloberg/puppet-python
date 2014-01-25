@@ -10,7 +10,7 @@ describe 'python' do
     should include_class("python::rehash")
 
     should contain_repository(root).with({
-      :ensure => 'v0.2.0',
+      :ensure => 'v0.4.0-20131217',
       :source => "yyuu/pyenv",
       :user   => "testuser",
     })

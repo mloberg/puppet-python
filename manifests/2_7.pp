@@ -5,5 +5,5 @@
 #   include python::2_7
 #
 class python::2_7 {
-  python::version { '2.7.3': }
+  python::version { '2.7.6': }
 }
