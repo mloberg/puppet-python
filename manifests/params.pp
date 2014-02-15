@@ -1,10 +1,23 @@
 # Config for Python module
 #
 class python::params {
-  include boxen::config
+  case $::osfamily {
+    'Darwin': {
+      include boxen::config
 
-  $pyenv_user = $::boxen_user
-  $pyenv_root = "${boxen::config::home}/pyenv"
+      $pyenv_root = "${boxen::config::home}/pyenv"
+      $user       = $::boxen_user
+    }
+
+    default: {
+      $pyenv_root = '/usr/local/share/pyenv'
+      $user       = 'root'
+    }
+  }
 
   $pyenv_version = 'v0.4.0-20131217'
+
+  $default_packages = ['']
+
+  $pyenv_plugins = {}
 }

@@ -5,11 +5,12 @@
 #   include python
 #
 class python(
-  $pyenv_root    = $python::params::pyenv_root,
-  $pyenv_user    = $python::params::pyenv_user,
-  $pyenv_version = $python::params::pyenv_version
+  $default_packages = $python::params::default_packages,
+  $pyenv_plugins    = {},
+  $pyenv_version    = $python::params::pyenv_version,
+  $pyenv_root       = $python::params::pyenv_root,
+  $user             = $python::params::user,
 ) inherits python::params {
-  include python::rehash
 
   if $::osfamily == 'Darwin' {
     include boxen::config
@@ -19,27 +20,29 @@ class python(
     }
 
     file { "${boxen::config::envdir}/pyenv.sh":
-      source => 'puppet:///modules/python/pyenv.sh',
+      ensure => absent,
+    }
+
+    boxen::env_script { 'pyenv':
+      source   => 'puppet:///modules/python/pyenv.sh',
+      priority => 'higher'
     }
   }
 
   repository { $pyenv_root:
     ensure => $pyenv_version,
     source => 'yyuu/pyenv',
-    user   => $pyenv_user,
+    user   => $user,
   }
 
-  file { "${pyenv_root}/versions":
-    ensure  => directory,
-    owner   => $pyenv_user,
-    require => Repository[$pyenv_root],
-  }
-
-  file { "${pyenv_root}/plugins/python-build/bin/pyenv-install":
-    ensure  => file,
-    source  => 'puppet:///modules/python/pyenv-install',
-    owner   => $pyenv_user,
-    mode    => '0755',
-    require => Repository[$pyenv_root],
+  file {
+    [
+      "${pyenv_root}/pyenv.d",
+      "${pyenv_root}/pyenv.d/install",
+      "${pyenv_root}/shims",
+      "${pyenv_root}/versions",
+    ]:
+      ensure  => directory,
+      require => Repository[$pyenv_root],
   }
 }
