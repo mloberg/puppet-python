@@ -1,53 +1,45 @@
 require "spec_helper"
 
 describe "python::local" do
-  let(:facts) { default_test_facts }
-  let(:title) { '/test/path' }
-  let(:params) do
-    { :version => "2.7.3" }
+  let(:facts) do
+    {
+      :boxen_home                  => '/opt/boxen',
+      :boxen_user                  => 'mloberg',
+      :macosx_productversion_major => '10.9',
+    }
   end
 
-  it do
-    should include_class("python::2_7_3")
+  let(:title) { '/tmp' }
 
-    should contain_file("#{title}/.python-version").with({
-      :ensure  => "present",
-      :content => "2.7.3\n",
-      :replace => true
-    })
-  end
-
-  context "with invalid version" do
+  context 'ensure => present' do
     let(:params) do
-      { :version => "no-version" }
+      {
+        :version => '2.7.6'
+      }
     end
 
     it do
-      expect {
-        should contain_file("#{title}/.python-version")
-      }.to raise_error(Puppet::Error, /Version must be of the form N\.N\.\(\.N\)/)
+      should contain_python__version('2.7.6')
+
+      should contain_file('/tmp/.pyenv-version').with_ensure('absent')
+      should contain_file('/tmp/.python-version').with({
+        :ensure  => 'present',
+        :content => "2.7.6\n",
+        :replace => true,
+      })
     end
   end
 
-  context "with ensure absent" do
+  context 'ensure => absent' do
     let(:params) do
-      { :ensure => "absent" }
+      {
+        :ensure => 'absent'
+      }
     end
 
     it do
-      should contain_file("#{title}/.python-version").with_ensure("absent")
-    end
-  end
-
-  context "with invalid ensure" do
-    let(:params) do
-      { :ensure => "foo" }
-    end
-
-    it do
-      expect {
-        should contain_file("#{title}/.python-version")
-      }.to raise_error(Puppet::Error, /Ensure must be one of present or absent/)
+      should contain_file('/tmp/.pyenv-version').with_ensure('absent')
+      should contain_file('/tmp/.python-version').with_ensure('absent')
     end
   end
 end

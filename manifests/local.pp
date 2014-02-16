@@ -4,26 +4,25 @@
 #
 #   python::local { '/path/to/directory': version => '3.3.0' }
 #
-define python::local(
-  $version = undef,
-  $path    = $title,
-  $ensure  = present
-) {
-  validate_re($ensure, '^(present|absent)$',
-    'Ensure must be one of present or absent')
 
-  if $ensure == present {
-    validate_re($version, '^\d+\.\d+(\.\d+)*$',
-      'Version must be of the form N.N.(.N)')
+define python::local($version = undef, $ensure  = present) {
+  include python
 
-    require join(['python', join(split($version, '\.'), '_')], '::')
+  if $version != 'system' {
+    ensure_resource('python::version', $version)
+    $require = Python::Version[$version]
+  } else {
+    $require = undef
   }
 
-  validate_absolute_path($path)
-
-  file { "${path}/.python-version":
-    ensure  => $ensure,
-    content => "${version}\n",
-    replace => true,
+  file {
+    "${name}/.python-version":
+      ensure  => $ensure,
+      content => "${version}\n",
+      replace => true,
+      require => $require;
+    "${name}/.pyenv-version":
+      ensure => absent,
+      before => "${name}/.python-version",
   }
 }
