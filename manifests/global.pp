@@ -4,17 +4,22 @@
 #
 #   class { 'python::global': version => '2.7.3' }
 #
-class python::global($version = '2.7.3') {
-  require python
-  require join(['python', join(split($version, '\.'), '_')], '::')
 
-  validate_re($version, '^\d+\.\d+(\.\d+)*$',
-    'Version must be of the form N.N.(.N)')
+class python::global($version = '2.7.6') {
+  include python
+
+  if $version != 'system' {
+    ensure_resource('python::version', $version)
+    $require = Python::Version[$version]
+  } else {
+    $require = undef
+  }
 
   file { "${python::pyenv_root}/version":
     ensure  => present,
-    owner   => $python::pyenv_user,
+    owner   => $python::user,
     mode    => '0644',
     content => "${version}\n",
+    require => $require,
   }
 }
