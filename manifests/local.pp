@@ -8,11 +8,14 @@
 define python::local($version = undef, $ensure  = present) {
   include python
 
-  if $version != 'system' {
-    ensure_resource('python::version', $version)
-    $require = Python::Version[$version]
-  } else {
-    $require = undef
+  case $version {
+    'system': { $require = undef }
+    undef: { $require = undef }
+
+    default: {
+      ensure_resource('python::version', $version)
+      $require = Python::Version[$version]
+    }
   }
 
   file {
