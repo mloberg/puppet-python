@@ -5,7 +5,6 @@ describe 'python' do
 
   let(:default_params) do
     {
-      :default_packages => [],
       :pyenv_plugins    => {},
       :pyenv_version    => 'v0.4.0-20131217',
       :pyenv_root       => '/test/boxen/pyenv',
@@ -37,6 +36,11 @@ describe 'python' do
 
     should contain_file('/test/boxen/env.d/pyenv.sh').with_ensure("absent")
     should contain_boxen__env_script("pyenv")
+
+    should contain_python__plugin('pyenv-pip-rehash').with({
+      :ensure => 'v0.0.3',
+      :source => 'yyuu/pyenv-pip-rehash',
+    })
   end
 
   context "not darwin" do
@@ -47,6 +51,26 @@ describe 'python' do
 
       should_not contain_file('/test/boxen/env.d/pyenv.sh').
         with_source('puppet:///modules/python/pyenv.sh')
+    end
+  end
+
+  context "pyenv plugins" do
+    let(:params) do
+      default_params.merge(
+        :pyenv_plugins => {
+          'pyenv-virtualenv' => {
+            'ensure' => 'v20140123',
+            'source' => 'yyuu/pyenv-virtualenv',
+          }
+        }
+      )
+    end
+
+    it do
+      should contain_python__plugin('pyenv-virtualenv').with({
+        :ensure => 'v20140123',
+        :source => 'yyuu/pyenv-virtualenv',
+      })
     end
   end
 end

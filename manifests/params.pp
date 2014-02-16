@@ -17,7 +17,10 @@ class python::params {
 
   $pyenv_version = 'v0.4.0-20131217'
 
-  $default_packages = ['']
-
-  $pyenv_plugins = {}
+  $pyenv_plugins = {
+    'pyenv-pip-rehash' => {
+      'ensure' => 'v0.0.3',
+      'source' => 'yyuu/pyenv-pip-rehash',
+    }
+  }
 }

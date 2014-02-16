@@ -5,7 +5,6 @@
 #   include python
 #
 class python(
-  $default_packages = $python::params::default_packages,
   $pyenv_plugins    = {},
   $pyenv_version    = $python::params::pyenv_version,
   $pyenv_root       = $python::params::pyenv_root,
@@ -45,4 +44,12 @@ class python(
       ensure  => directory,
       require => Repository[$pyenv_root],
   }
+
+  $_real_pyenv_plugins = merge($python::params::pyenv_plugins, $pyenv_plugins)
+  create_resources('python::plugin', $_real_pyenv_plugins)
+
+  Repository[$pyenv_root] ->
+    File <| tag == 'python_plugin_config' |> ->
+    Python::Plugin <| |> ->
+    Python::Version <| |>
 }
