@@ -9,8 +9,7 @@ define python::local($version = undef, $ensure  = present) {
   include python
 
   case $version {
-    'system': { $require = undef }
-    undef: { $require = undef }
+    'system', undef: { $require = undef }
 
     default: {
       ensure_resource('python::version', $version)
