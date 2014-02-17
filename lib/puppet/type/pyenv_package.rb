@@ -1,5 +1,5 @@
 Puppet::Type.newtype(:pyenv_package) do
-  @doc = ""
+  @doc = "Install a Python package"
 
   ensurable
 
@@ -8,19 +8,20 @@ Puppet::Type.newtype(:pyenv_package) do
   end
 
   newparam(:package) do
-    desc ""
+    desc "Name of the package to install"
   end
 
   newparam(:pyenv_version) do
-    desc ""
+    desc "The Python version to install under"
   end
 
   newparam(:version) do
-    desc ""
+    desc "The version of the package to install"
+    defaultto '>=0'
   end
 
   newparam(:pyenv_root) do
-    desc ""
+    desc "The location of pyenv install"
   end
 
   autorequire(:exec) do

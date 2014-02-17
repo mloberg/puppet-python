@@ -28,11 +28,15 @@ Puppet::Type.type(:pyenv_package).provide(:pip) do
   end
 
   def create
-    pyenv_package "install #{@resource[:package]}==#{@resource[:version]}"
+    version = @resource[:version]
+    if (not version =~ /^==/) and (not version.include?(','))
+      version = "==#{@resource[:version]}"
+    end
+    pyenv_package "install '#{@resource[:package]}#{version}'"
   end
 
   def destroy
-    pyenv_package "uninstall -y -q  #{@resource[:name]}"
+    pyenv_package "uninstall -y -q #{@resource[:name]}"
   end
 
   def exists?
@@ -53,6 +57,16 @@ Puppet::Type.type(:pyenv_package).provide(:pip) do
 
     return false if package.nil?
 
-    return package[:version] == @resource[:version]
+    version = Gem::Version.new(package[:version])
+    @resource[:version].split(',').each do |req|
+      if req =~ /^==/
+        if Gem::Requirement.new(req.sub(/^==/, '')).satisfied_by?(version)
+          return true
+        end
+      elsif not Gem::Requirement.new(req).satisfied_by?(version)
+        return false
+      end
+    end
+    return true
   end
 end
