@@ -19,7 +19,7 @@ define python::version(
 
   $alias_hash = hiera_hash('python::version::alias', {})
   if has_key($alias_hash, $version) {
-    $taget = $alias_hash[$version]
+    $target = $alias_hash[$version]
 
     file { "${python::pyenv_root}/versions/${version}":
       ensure => symlink,
