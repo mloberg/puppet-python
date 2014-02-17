@@ -28,11 +28,7 @@ Puppet::Type.type(:pyenv_package).provide(:pip) do
   end
 
   def create
-    version = @resource[:version]
-    if (not version =~ /^==/) and (not version.include?(','))
-      version = "==#{@resource[:version]}"
-    end
-    pyenv_package "install '#{@resource[:package]}#{version}'"
+    pyenv_package "install '#{@resource[:package]}#{@resource[:version]}'"
   end
 
   def destroy
