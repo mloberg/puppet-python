@@ -2,22 +2,21 @@
 #
 # Usage:
 #
-#   python::pacakge { 'virtualenv': python_version => }'2.7.3' }
+#   python::pacakge { 'virtualenv':
+#     python => '2.7.3',
+#     version => '1.11.2',
+#   }
 #
-define python::package(
-  $python_version,
-  $package = $title,
-  $ensure = installed,
-) {
-  include python
-  require join(['python', join(split($python_version, '\.'), '_')], '::')
 
-  python_package { $name:
+define python::package($package, $python, $ensure = 'present', $version = '>= 0') {
+  require python
+
+  pyenv_package { $name:
     ensure         => $ensure,
     package        => $package,
-    python_version => $python_version,
+    version        => $version,
+    pyenv_version  => $python,
     pyenv_root     => $python::pyenv_root,
-    user           => $python::pyenv_user,
-    provider       => pyenv
+    provider       => pip,
   }
 }
