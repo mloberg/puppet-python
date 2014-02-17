@@ -2,34 +2,62 @@
 
 [![Build Status](https://travis-ci.org/mloberg/puppet-python.png?branch=master)](https://travis-ci.org/mloberg/puppet-python)
 
-Install Python versions using [pyenv](https://github.com/yyuu/pyenv). Module based off of [puppet-nodejs](https://github.com/boxen/puppet-nodejs).
+Install Python versions using [pyenv](https://github.com/yyuu/pyenv). Module based off of [puppet-ruby](https://github.com/boxen/puppet-ruby) and [puppet-nodejs](https://github.com/boxen/puppet-nodejs).
 
 ## Usage
 
 ```puppet
-include python::2_7_3
-include python::3_3_0
-
-# Install any arbitrary Python version
-python { '2.6.8': }
-
-# Install a Python package
-python::package { 'virtualenv':
-  python_version => '2.7.3',
-}
+# Install Python versions
+python::version { '2.7.6': }
+python::version { '3.3.3': }
 
 # Set the global version of Python
-class { 'python::global': version => '2.7.3' }
+class { 'python::global':
+  version => '2.7.6'
+}
 
-# Set version of Python within a specific directory
-python::local { '/path/to/directory': version => '3.3.0' }
+# ensure a certain ruby version is used in a dir
+python::local { '/path/to/some/project':
+  version => '3.3.3'
+}
+
+# Install the latest version of virutalenv
+$version = '3.3.3'
+python::package { "virtualenv for ${version}":
+  package => 'virtualenv',
+  python  => $version,
+}
+# Install Django 1.6.x
+python::package { "django for 2.7.6":
+  package => 'django',
+  python  => '2.7.6',
+  version => '>=1.6,<1.7',
+}
+
+# Installing a pyenv plugin
+python::plugin { 'pyenv-virtualenvwrapper':
+  ensure => 'v20140122',
+  source => 'yyuu/pyenv-virtualenvwrapper',
+}
+
+# Running a package script
+# pyenv-installed gems cannot be run in the boxen installation environment which uses the system
+# python. The environment must be cleared (env -i) so an installed python (and packages) can be used in a new shell.
+exec { "env -i bash -c 'source /opt/boxen/env.sh && PYENV_VERSION=${version} virtualenv venv'":
+  provider => 'shell',
+  cwd => "~/src/project",
+  require => Python::Package["virtualenv for ${version}"],
+}
 ```
 
 ## Required Puppet Modules
 
-* `boxen`
-* `repository`
+* `boxen >= 3.2.0`
+* `repository >= 2.1`
+* `xquartz`
+* `gcc`
 * `stdlib`
+* `java` (jython)
 
 ## Development
 
