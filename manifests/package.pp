@@ -3,8 +3,8 @@
 # Usage:
 #
 #   python::pacakge { 'virtualenv':
-#     python => '2.7.3',
-#     version => '1.11.2',
+#     python  => '2.7.6',
+#     version => '==1.11.2',
 #   }
 #
 
