@@ -32,7 +32,7 @@ Puppet::Type.type(:pyenv_package).provide(:pip) do
   end
 
   def destroy
-    pyenv_package "uninstall -y -q #{@resource[:name]}"
+    pyenv_package "uninstall -y -q #{@resource[:package]}"
   end
 
   def exists?
