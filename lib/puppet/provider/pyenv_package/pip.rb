@@ -40,7 +40,7 @@ Puppet::Type.type(:pyenv_package).provide(:pip) do
     packages = Array.new.tap do |a|
       unless packagelist.nil?
         packagelist.split("\n").each do |package|
-          match = /(\w*)==(.*)$/.match(package)
+          match = /([a-zA-Z0-9_-]*)==(.*)$/.match(package)
           a << {
             :package => match[1].downcase(),
             :version => match[2],
