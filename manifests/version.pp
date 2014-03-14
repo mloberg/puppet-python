@@ -2,7 +2,7 @@
 #
 # Usage:
 #
-#   python::version { '2.7.3' }
+#   python::version { '2.7.3': }
 #
 
 define python::version(
