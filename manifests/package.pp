@@ -2,7 +2,8 @@
 #
 # Usage:
 #
-#   python::pacakge { 'virtualenv':
+#   python::package { 'virtualenv==1.11.2 for 2.7.6':
+#     package => 'virtualenv'
 #     python  => '2.7.6',
 #     version => '==1.11.2',
 #   }
