@@ -15,16 +15,16 @@ define python::local($version = undef, $ensure  = present) {
       ensure_resource('python::version', $version)
       $require = Python::Version[$version]
     }
+
   }
 
-  file {
-    "${name}/.python-version":
-      ensure  => $ensure,
-      content => "${version}\n",
-      replace => true,
-      require => $require;
-    "${name}/.pyenv-version":
-      ensure => absent,
-      before => "${name}/.python-version",
+  file { "${name}/.pyenv-version":
+    ensure => absent
+  } -> file { "${name}/.python-version":
+    ensure  => $ensure,
+    content => "${version}\n",
+    replace => true,
+    require => $require
   }
+
 }
