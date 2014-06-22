@@ -15,11 +15,11 @@ class python::params {
     }
   }
 
-  $pyenv_version = 'v0.4.0-20140311'
+  $pyenv_version = 'v20140615'
 
   $pyenv_plugins = {
     'pyenv-pip-rehash' => {
-      'ensure' => 'v0.0.3',
+      'ensure' => 'v0.0.4',
       'source' => 'yyuu/pyenv-pip-rehash',
     }
   }

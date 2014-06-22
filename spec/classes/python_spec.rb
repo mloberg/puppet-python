@@ -6,7 +6,7 @@ describe 'python' do
   let(:default_params) do
     {
       :pyenv_plugins    => {},
-      :pyenv_version    => 'v0.4.0-20131217',
+      :pyenv_version    => 'v20140615',
       :pyenv_root       => '/test/boxen/pyenv',
       :user             => 'boxenuser',
     }
@@ -23,7 +23,7 @@ describe 'python' do
     })
 
     should contain_repository('/test/boxen/pyenv').with({
-      :ensure => 'v0.4.0-20131217',
+      :ensure => 'v20140615',
       :source => 'yyuu/pyenv',
       :user   => 'boxenuser',
     })
@@ -38,7 +38,7 @@ describe 'python' do
     should contain_boxen__env_script("pyenv")
 
     should contain_python__plugin('pyenv-pip-rehash').with({
-      :ensure => 'v0.0.3',
+      :ensure => 'v0.0.4',
       :source => 'yyuu/pyenv-pip-rehash',
     })
   end
