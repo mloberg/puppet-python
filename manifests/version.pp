@@ -63,6 +63,7 @@ define python::version(
       timeout  => 0,
       creates  => $dest,
       user     => $python::user,
+      require  => Repository[$python::pyenv_root],
     }
 
     Exec["python-install-${version}"] {
