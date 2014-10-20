@@ -14,9 +14,10 @@ define python::plugin ($ensure, $source) {
   include python
 
   repository { "${python::pyenv_root}/plugins/${name}":
-    ensure => $ensure,
-    force  => true,
-    source => $source,
-    user   => $python::user,
+    ensure  => $ensure,
+    force   => true,
+    source  => $source,
+    user    => $python::user,
+    require => Repository[$python::pyenv_root],
   }
 }
