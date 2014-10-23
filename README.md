@@ -16,12 +16,12 @@ class { 'python::global':
   version => '2.7.7'
 }
 
-# ensure a certain ruby version is used in a dir
+# ensure a certain python version is used in a dir
 python::local { '/path/to/some/project':
   version => '3.4.1'
 }
 
-# Install the latest version of virutalenv
+# Install the latest version of virtualenv
 $version = '3.4.1'
 python::package { "virtualenv for ${version}":
   package => 'virtualenv',
