@@ -15,7 +15,8 @@ class python(
     include boxen::config
 
     package { 'readline':
-      ensure => latest,
+      ensure   => latest,
+      provider => homebrew,
     }
 
     file { "${boxen::config::envdir}/pyenv.sh":

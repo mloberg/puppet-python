@@ -20,6 +20,7 @@ describe 'python' do
 
     should contain_package("readline").with({
       :ensure => 'latest',
+      :provider => 'homebrew',
     })
 
     should contain_repository('/test/boxen/pyenv').with({
