@@ -4,21 +4,20 @@
 #
 #   python::version { '2.7.3': }
 #
-# Hiera override for CFLAGS and LDFLAGS example:
+# NOTE: OS_ENV settings are sane for OS X but can easily be changed for your setup
+# See the Hiera example below:
 #
 #   python::version::os_env:
-#       CFLAGS: -I/opt/X11/include -I/usr/include
-#       LDFLAGS: -L/opt/X11/lib
+#       CFLAGS: "-I/opt/X11/include -I/usr/include"
+#       LDFLAGS: "-L/opt/X11/lib"
 
 define python::version(
   $ensure  = 'installed',
   $env     = {},
   $version = $name,
-  $os_env  = $python::params::os_env,
+  $os_env  = hiera_hash('python::version::os_env', $python::params::os_env),
 ) {
   require python
-
-  notify { "OS_ENV Settings: ${os_env}": }
 
   case $version {
     /jython/: { require java }
