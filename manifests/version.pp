@@ -4,13 +4,21 @@
 #
 #   python::version { '2.7.3': }
 #
+# Hiera override for CFLAGS and LDFLAGS example:
+#
+#   python::version::os_env:
+#       CFLAGS: -I/opt/X11/include -I/usr/include
+#       LDFLAGS: -L/opt/X11/lib
 
 define python::version(
   $ensure  = 'installed',
   $env     = {},
   $version = $name,
+  $os_env  = $python::params::os_env,
 ) {
   require python
+
+  notify { "OS_ENV Settings: ${os_env}": }
 
   case $version {
     /jython/: { require java }
@@ -23,26 +31,8 @@ define python::version(
       include homebrew::config
       include boxen::config
 
-      # Fix for 10.9 and 10.10 build issues
-      case $::macosx_productversion_major {
-        /(10.9|10.10)/: {
-          $os_env = {
-            'CFLAGS'  => "-I${homebrew::config::installdir}/include -I/opt/X11/include -I${::xcrun_sdk_path}/usr/include",
-            'LDFLAGS' => "-L${homebrew::config::installdir}/lib -L/opt/X11/lib",
-          }
-        }
-        default: {
-          $os_env = {
-            'CFLAGS'  => "-I${homebrew::config::installdir}/include -I/opt/X11/include",
-            'LDFLAGS' => "-L${homebrew::config::installdir}/lib -L/opt/X11/lib",
-          }
-        }
-      }
-
     }
-    default: {
-      $os_env = {}
-    }
+    default: { }
   }
 
   $dest = "${python::pyenv_root}/versions/${version}"
