@@ -23,12 +23,23 @@ define python::version(
       include homebrew::config
       include boxen::config
 
-      $os_env = {
-        'CFLAGS'  => "-I${homebrew::config::installdir}/include -I/opt/X11/include",
-        'LDFLAGS' => "-L${homebrew::config::installdir}/lib -L/opt/X11/lib",
+      # Fix for 10.9 and 10.10 build issues
+      case $::macosx_productversion_major {
+        /(10.9|10.10)/: {
+          $os_env = {
+            'CFLAGS'  => "-I${homebrew::config::installdir}/include -I/opt/X11/include -I${::xcrun_sdk_path}/usr/include",
+            'LDFLAGS' => "-L${homebrew::config::installdir}/lib -L/opt/X11/lib",
+          }
+        }
+        default: {
+          $os_env = {
+            'CFLAGS'  => "-I${homebrew::config::installdir}/include -I/opt/X11/include",
+            'LDFLAGS' => "-L${homebrew::config::installdir}/lib -L/opt/X11/lib",
+          }
+        }
       }
-    }
 
+    }
     default: {
       $os_env = {}
     }
