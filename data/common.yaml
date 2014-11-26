@@ -1,0 +1,11 @@
+---
+python::version::alias:
+  "2": 2.7.8
+  "2.7": 2.7.8
+
+python::prefix: '/opt'
+python::user: "%{::id}"
+
+python::pyenv::ensure: v20141012
+python::pyenv::prefix: "%{hiera('python::prefix')}/pyenv"
+python::pyenv::user: "%{hiera('python::user')}"

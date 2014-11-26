@@ -1,0 +1,9 @@
+---
+python::version::env:
+  Darwin:
+    CFLAGS: "-I%{::homebrew::config::installdir}/include -I/opt/X11/include -march=core2 -O3"
+    LDFLAGS: "-L%{::homebrew::config::installdir}/lib -L/opt/X11/lib"
+    PYTHON_CONFIGURE_OPTS: "--with-readline-dir=%{::homebrew::config::installdir}/opt/readline"
+
+python::prefix: "%{::boxen::config::home}"
+python::user: "%{::boxen_user}"
