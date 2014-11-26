@@ -16,11 +16,14 @@ class python(
 
   if $::osfamily == 'Darwin' {
     boxen::env_script { 'pyenv':
-      source   => 'puppet:///modules/python/pyenv.sh',
+      content  => template('python/pyenv.sh.erb'),
       priority => 'higher'
     }
   }
 
+  file { '/opt/python':
+    ensure => directory,
+    owner  => $user,
   }
 
   Class['python::pyenv'] ->
