@@ -15,8 +15,8 @@ describe 'python' do
   let(:params) { default_params }
 
   it do
-    should include_class("python::params")
-    should include_class("boxen::config")
+    should contain_class("python::params")
+    should contain_class("boxen::config")
 
     should contain_package("readline").with({
       :ensure => 'latest',
@@ -47,7 +47,7 @@ describe 'python' do
     let(:facts) { default_test_facts.merge(:osfamily => "Linux") }
 
     it do
-      should_not include_class("boxen::config")
+      should_not contain_class("boxen::config")
 
       should_not contain_file('/test/boxen/env.d/pyenv.sh').
         with_source('puppet:///modules/python/pyenv.sh')

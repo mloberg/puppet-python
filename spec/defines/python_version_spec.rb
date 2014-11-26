@@ -7,7 +7,7 @@ describe "python::version" do
   context "ensure => present" do
     context "default params" do
       it do
-        should include_class("python")
+        should contain_class("python")
 
         should contain_exec("python-install-2.7.6").with({
           :command  => "/test/boxen/pyenv/bin/pyenv install 2.7.6",
