@@ -29,6 +29,4 @@ class python(
   Class['python::pyenv'] ->
     Python::Version <| |> ->
     Python::Plugin <| |>
-
-
 }
