@@ -17,7 +17,7 @@ define python::package($package, $python, $ensure = 'present', $version = '>= 0'
     package        => $package,
     version        => $version,
     pyenv_version  => $python,
-    pyenv_root     => $python::pyenv_root,
+    pyenv_root     => $python::pyenv::prefix,
     provider       => pip,
   }
 }
