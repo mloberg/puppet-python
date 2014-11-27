@@ -5,7 +5,9 @@
 #   class { 'python::global': version => '2.7.3' }
 #
 
-class python::global($version = '2.7.8') {
+class python::global(
+  $version = '2.7.8',
+) {
   require python
 
   if $version != 'system' {

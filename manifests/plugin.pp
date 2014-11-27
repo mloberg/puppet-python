@@ -10,7 +10,10 @@
 #   }
 #
 
-define python::plugin ($ensure, $source) {
+define python::plugin (
+    $ensure,
+    $source,
+) {
   require python
 
   repository { "${python::pyenv::prefix}/plugins/${name}":

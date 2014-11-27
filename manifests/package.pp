@@ -9,7 +9,12 @@
 #   }
 #
 
-define python::package($package, $python, $ensure = 'present', $version = '>= 0') {
+define python::package(
+    $package,
+    $python,
+    $ensure = 'present',
+    $version = '>= 0',
+) {
   require python
 
   pyenv_package { $name:
