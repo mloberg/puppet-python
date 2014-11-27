@@ -13,6 +13,7 @@ define python::version(
   require python
 
   $alias_hash = hiera_hash('python::version::alias', {})
+  $dest = "/opt/python/${version}"
 
   if has_key($alias_hash, $version) {
     $to = $alias_hash[$version]
@@ -20,6 +21,11 @@ define python::version(
     python::alias { $version:
       ensure => $ensure,
       to     => $to,
+    }
+  } elsif $ensure == 'absent' {
+    file { $dest:
+      ensure => absent,
+      force  => true,
     }
   } else {
     case $version {
