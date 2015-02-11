@@ -4,11 +4,18 @@
 #
 #   python::version { '2.7.3': }
 #
+# NOTE: OS_ENV settings are sane for OS X but can easily be changed for your setup
+# See the Hiera example below:
+#
+#   python::version::os_env:
+#       CFLAGS: "-I/opt/X11/include -I/usr/include"
+#       LDFLAGS: "-L/opt/X11/lib"
 
 define python::version(
   $ensure  = 'installed',
   $env     = {},
   $version = $name,
+  $os_env  = hiera_hash('python::version::os_env', $python::params::os_env),
 ) {
   require python
 
@@ -23,15 +30,8 @@ define python::version(
       include homebrew::config
       include boxen::config
 
-      $os_env = {
-        'CFLAGS'  => "-I${homebrew::config::installdir}/include -I/opt/X11/include",
-        'LDFLAGS' => "-L${homebrew::config::installdir}/lib -L/opt/X11/lib",
-      }
     }
-
-    default: {
-      $os_env = {}
-    }
+    default: { }
   }
 
   $dest = "${python::pyenv_root}/versions/${version}"
