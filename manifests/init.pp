@@ -14,9 +14,7 @@ class python(
   if $::osfamily == 'Darwin' {
     include boxen::config
 
-    package { 'readline':
-      ensure => latest,
-    }
+    ensure_resource('package','readline')
 
     file { "${boxen::config::envdir}/pyenv.sh":
       ensure => absent,
