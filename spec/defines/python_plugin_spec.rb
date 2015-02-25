@@ -13,7 +13,7 @@ describe 'python::plugin' do
   end
 
   it do
-    should include_class("python")
+    should contain_class("python")
 
     should contain_repository("/test/boxen/pyenv/plugins/pyenv-virtualenv").with({
       :ensure => "v20140123",

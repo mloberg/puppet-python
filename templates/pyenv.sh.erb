@@ -1,5 +1,5 @@
-export PYENV_ROOT=<%= scope.lookupvar('::python::pyenv_root') %>
+export PYENV_ROOT=<%= scope.lookupvar("::python::pyenv::prefix") %>
 
-export PATH=$PYENV_ROOT/bin:$PATH
+export PATH=<%= scope.lookupvar("::python::pyenv::prefix") %>/bin:$PATH
 
 eval "$(pyenv init -)"

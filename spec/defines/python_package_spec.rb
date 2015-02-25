@@ -13,7 +13,7 @@ describe "python::package" do
   end
 
   it do
-    should include_class("python")
+    should contain_class("python")
 
     should contain_pyenv_package("virtualenv for 2.7.6").with({
       :package       => 'virtualenv',

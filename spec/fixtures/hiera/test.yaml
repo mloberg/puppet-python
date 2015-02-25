@@ -1,0 +1,3 @@
+python::version::env:
+  2.7.6:
+    FROM_HIERA: 'true'

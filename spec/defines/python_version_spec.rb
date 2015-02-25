@@ -7,14 +7,14 @@ describe "python::version" do
   context "ensure => present" do
     context "default params" do
       it do
-        should include_class("python")
+        should contain_class("python")
 
         should contain_exec("python-install-2.7.6").with({
-          :command  => "/test/boxen/pyenv/bin/pyenv install 2.7.6",
+          :command  => "/test/boxen/pyenv/bin/pyenv install --skip-existing 2.7.6",
           :cwd      => '/test/boxen/pyenv/versions',
           :provider => 'shell',
           :timeout  => 0,
-          :creates  => '/test/boxen/pyenv/versions/2.7.6'
+          :creates  => '/opt/python/2.7.6'
         })
       end
     end
@@ -23,9 +23,8 @@ describe "python::version" do
       it do
         should contain_exec("python-install-2.7.6").with_environment([
           "CC=/usr/bin/cc",
-          "CFLAGS=-I/test/boxen/homebrew/include -I/opt/X11/include",
-          "LDFLAGS=-L/test/boxen/homebrew/lib -L/opt/X11/lib",
-          "PYENV_ROOT=/test/boxen/pyenv"
+          "FROM_HIERA=true",
+          "PYENV_ROOT=/test/boxen/pyenv",
         ])
       end
     end
@@ -40,8 +39,7 @@ describe "python::version" do
       it do
         should contain_exec("python-install-2.7.6").with_environment([
           "CC=/usr/bin/cc",
-          "CFLAGS=-I/test/boxen/homebrew/include -I/opt/X11/include",
-          "LDFLAGS=-L/test/boxen/homebrew/lib -L/opt/X11/lib",
+          "FROM_HIERA=true",
           "PYENV_ROOT=/test/boxen/pyenv",
           "SOME_VAR=foobar",
         ])
@@ -57,7 +55,7 @@ describe "python::version" do
     end
 
     it do
-      should contain_file('/test/boxen/pyenv/versions/2.7.6').with({
+      should contain_file('/opt/python/2.7.6').with({
         :ensure => 'absent',
         :force  => true,
       })

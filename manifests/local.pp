@@ -5,7 +5,10 @@
 #   python::local { '/path/to/directory': version => '3.3.0' }
 #
 
-define python::local($version = undef, $ensure  = present) {
+define python::local(
+  $version = undef,
+  $ensure  = present,
+) {
   include python
 
   case $version {
@@ -26,5 +29,4 @@ define python::local($version = undef, $ensure  = present) {
     replace => true,
     require => $require
   }
-
 }

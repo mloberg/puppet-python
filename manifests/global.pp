@@ -5,8 +5,10 @@
 #   class { 'python::global': version => '2.7.3' }
 #
 
-class python::global($version = '2.7.6') {
-  include python
+class python::global(
+  $version = '2.7.8',
+) {
+  require python
 
   if $version != 'system' {
     ensure_resource('python::version', $version)
@@ -15,7 +17,7 @@ class python::global($version = '2.7.6') {
     $require = undef
   }
 
-  file { "${python::pyenv_root}/version":
+  file { "${python::pyenv::prefix}/version":
     ensure  => present,
     owner   => $python::user,
     mode    => '0644',

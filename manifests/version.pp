@@ -12,62 +12,71 @@ define python::version(
 ) {
   require python
 
-  case $version {
-    /jython/: { require java }
-    default: { }
-  }
+  $alias_hash = hiera_hash('python::version::alias', {})
+  $dest = "/opt/python/${version}"
 
-  case $::osfamily {
-    'Darwin': {
-      require xquartz
-      include homebrew::config
-      include boxen::config
+  if has_key($alias_hash, $version) {
+    $to = $alias_hash[$version]
 
-      $os_env = {
-        'CFLAGS'  => "-I${homebrew::config::installdir}/include -I/opt/X11/include",
-        'LDFLAGS' => "-L${homebrew::config::installdir}/lib -L/opt/X11/lib",
-      }
+    python::alias { $version:
+      ensure => $ensure,
+      to     => $to,
     }
-
-    default: {
-      $os_env = {}
-    }
-  }
-
-  $dest = "${python::pyenv_root}/versions/${version}"
-
-  if $ensure == 'absent' {
+  } elsif $ensure == 'absent' {
     file { $dest:
       ensure => absent,
       force  => true,
     }
   } else {
-    $default_env = {
-      'CC'         => '/usr/bin/cc',
-      'PYENV_ROOT' => $python::pyenv_root,
+    case $version {
+      /jython/: { require java }
+      default: { }
     }
 
-    $final_env = merge(merge($default_env, $os_env), $env)
+    $default_env = {
+      'CC'         => '/usr/bin/cc',
+      'PYENV_ROOT' => $python::pyenv::prefix,
+    }
 
-    if has_key($final_env, 'CC') {
-      case $final_env['CC'] {
-        /gcc/: { require gcc }
-        default: { }
-      }
+    if $::operatingsystem == 'Darwin' {
+      require xquartz
+      include homebrew::config
+      include boxen::config
+      ensure_resource('package', 'readline')
+    }
+
+    $hierdata = hiera_hash('python::version::env', {})
+
+    if has_key($hierdata, $::operatingsystem) {
+      $os_env = $hierdata[$::operatingsystem]
+    } else {
+      $os_env = {}
+    }
+
+    if has_key($hierdata, $version) {
+      $version_env = $hierdata[$version]
+    } else {
+      $version_env = {}
+    }
+
+    $_env = merge(merge(merge($default_env, $os_env), $version_env), $env)
+
+    if has_key($_env, 'CC') and $_env['CC'] =~ /gcc/ {
+      require gcc
     }
 
     exec { "python-install-${version}":
-      command  => "${python::pyenv_root}/bin/pyenv install ${version}",
-      cwd      => "${python::pyenv_root}/versions",
+      command  => "${python::pyenv::prefix}/bin/pyenv install --skip-existing ${version}",
+      cwd      => "${python::pyenv::prefix}/versions",
       provider => 'shell',
       timeout  => 0,
       creates  => $dest,
-      user     => $python::user,
-      require  => Repository[$python::pyenv_root],
+      user     => $python::pyenv::user,
+      require  => Package['readline'],
     }
 
     Exec["python-install-${version}"] {
-      environment +> sort(join_keys_to_values($final_env, '='))
+      environment +> sort(join_keys_to_values($_env, '='))
     }
   }
 }
