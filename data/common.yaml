@@ -1,14 +1,15 @@
 ---
 python::version::alias:
-  "2": 2.7.8
+  "2": 2.7.10
   "2.6": 2.6.9
-  "2.7": 2.7.8
-  "3": 3.4.2
-  "3.4": 3.4.2
+  "2.7": 2.7.10
+  "3": 3.5.0
+  "3.4": 3.4.3
+  "3.5": 3.5.0
 
 python::prefix: '/opt'
 python::user: "%{::id}"
 
-python::pyenv::ensure: v20141118
+python::pyenv::ensure: v20150913
 python::pyenv::prefix: "%{hiera('python::prefix')}/pyenv"
 python::pyenv::user: "%{hiera('python::user')}"
