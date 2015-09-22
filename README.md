@@ -8,8 +8,8 @@ Install Python versions using [pyenv](https://github.com/yyuu/pyenv). Module bas
 
 ```puppet
 # Install Python versions
-python::version { '2.7.7': }
-python::version { '3.4.1': }
+python::version { '2.7.10': }
+python::version { '3.5.0': }
 
 # Set the global version of Python
 class { 'python::global':

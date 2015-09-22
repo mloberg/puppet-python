@@ -6,7 +6,7 @@
 #
 
 class python::global(
-  $version = '2.7.8',
+  $version = '2.7.10',
 ) {
   require python
 
