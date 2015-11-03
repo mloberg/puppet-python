@@ -10,6 +10,6 @@ python::version::alias:
 python::prefix: '/opt'
 python::user: "%{::id}"
 
-python::pyenv::ensure: v20150913
+python::pyenv::ensure: v20151103
 python::pyenv::prefix: "%{hiera('python::prefix')}/pyenv"
 python::pyenv::user: "%{hiera('python::user')}"
